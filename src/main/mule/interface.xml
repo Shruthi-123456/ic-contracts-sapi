@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <flow name="ic-contracts-sapi-main">
+        <http:listener config-ref="ic-contracts-sapi-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="ic-contracts-sapi-config" />
+        <error-handler ref="Error_Handler" />
+    </flow>
+    <flow name="ic-contracts-sapi-console">
+        <http:listener config-ref="ic-contracts-sapi-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="ic-contracts-sapi-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="put:\contracts\(id):application\json:ic-contracts-sapi-config">
+        <flow-ref doc:name="Ref update-contracts-implementation-flow" doc:id="1becfdca-cd04-4ff6-b9e7-8c44f2d15f00" name="update-contracts-implementation-flow" />
+    </flow>
+    <flow name="delete:\contracts\(id):ic-contracts-sapi-config">
+        <flow-ref doc:name="Ref delete-contracts-implementation-flow" doc:id="29d58a6f-c215-4d00-9a8f-10a29b226053" name="delete-contracts-implementation-flow" />
+    </flow>
+    <flow name="get:\contracts:ic-contracts-sapi-config">
+        <flow-ref doc:name="Ref get-all-contracts-implementation-flow" doc:id="b8764be9-6055-4f34-b8c6-e69ab55af94d" name="get-all-contracts-implementation-flow" />
+    </flow>
+    <flow name="get:\contracts\(id):ic-contracts-sapi-config">
+        <flow-ref doc:name="Ref get-contracts-by-id-implementation-flow" doc:id="2539ccaa-cdee-434b-83ba-23291245007d" name="get-contracts-by-id-implementation-flow" />
+    </flow>
+    <flow name="post:\contracts:application\json:ic-contracts-sapi-config">
+        <flow-ref doc:name="Ref create-contracts-implementation-flow" doc:id="3ee7b61b-2654-4909-9ba8-4decad9da26b" name="create-contracts-implementation-flow" />
+    </flow>
+</mule>

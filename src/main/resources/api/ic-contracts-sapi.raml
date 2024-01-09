@@ -1,0 +1,70 @@
+#%RAML 1.0
+title: ic-contracts-sapi
+description: this api is used to integrate with the salesfore contracts object.
+version: v1
+protocols: [HTTP, HTTPS]
+mediaType: 
+- application/json
+
+traits:
+  client-id-required:
+    headers:
+      clientid:
+        type: string
+      clientsecret:
+        type: string
+     
+resourceTypes:
+  collections: !include /resourceTypes/AllCollections.raml
+
+uses:
+  errorsDataType: /resources/libraries/ErrorsDataType.raml
+  getContractsDataType: /resources/libraries/GetContractsDataType.raml
+  postContractsDataType: /resources/libraries/PostContractsDataType.raml
+  updateContractsDataType: /resources/libraries/UpdateContractsDataType.raml
+  deleteContractsDataType: /resources/libraries/DeleteContractsDataType.raml
+
+/contracts:
+
+  type:
+    collections:
+      get-response-schema: getContractsDataType.get_contracts_response
+      get-response-example: !include /examples/responses/getAllContractsResponseExample.json
+      post-request-schema: postContractsDataType.post_contracts_request
+      post-request-example: !include /examples/requests/postContractsRequestExample.json
+      post-response-schema: postContractsDataType.post_contracts_response
+      post-response-example: !include /examples/responses/postContractsReaponseExample.json
+      errors-schema: errorsDataType.error
+
+  get:
+    is:
+      - client-id-required
+  post:
+    is:
+      - client-id-required
+  /{id}:
+    type:
+      collections:
+        get-response-schema: getContractsDataType.get_contracts_response
+        get-response-example: !include /examples/responses/getContractsByIdResponseExample.json
+        put-request-schema: updateContractsDataType.update_contracts_request
+        put-request-example: !include /examples/requests/updateContractsRequestExample.json
+        put-response-schema: updateContractsDataType.update_contracts_response
+        put-response-example: !include /examples/responses/updateContractsResponseExample.json
+        delete-response-schema: deleteContractsDataType.delete_contracts_response
+        delete-response-example: !include /examples/responses/deleteContractsResponseExample.json
+        errors-schema: errorsDataType.error
+    get:
+      is:
+        client-id-required
+    put:
+      is:
+        client-id-required
+    delete:
+      is:
+        - client-id-required
+    
+
+
+
+    

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="get-all-contracts-implementation-flow" doc:id="551fd0f3-e259-41e5-9ff9-449cbc49d1e4" >
+		<logger level="INFO" doc:name="get-all-contracts-implementation-flow-started" doc:id="a7038e45-1255-465d-8058-6a817794edfb" message="get-all-contracts-implementation-flow-started"/>
+		<salesforce:query doc:name="Get All Contracts From Salesforce" doc:id="7817d064-18a8-4650-85b5-96845234a715" config-ref="Salesforce_Config">
+			<salesforce:salesforce-query ><![CDATA[SELECT AccountId,BillingCity,BillingCountry,BillingPostalCode,BillingState,BillingStreet,Id,Description,Status FROM Contract]]></salesforce:salesforce-query>
+		</salesforce:query>
+		<ee:transform doc:name="DW Set To Get All Contracts Respnose Transform" doc:id="9a10e031-2e42-4d8b-8036-991e3486b83e">
+			<ee:message>
+				<ee:set-payload resource="dwlScripts/get-all-contracts-respnse.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="get-all-contracts-implementation-flow-ended" doc:id="c4d1516b-956c-4a8c-9f24-6cb268d2ae98" message="get-all-contracts-implementation-flow-ended"/>
+	</sub-flow>
+	<sub-flow name="get-contracts-by-id-implementation-flow" doc:id="1a5c177b-0ce7-498c-8808-d8c7b412c1c6" >
+		<logger level="INFO" doc:name="get-contracts-by-id-implementation-flow-started" doc:id="1948844e-5fca-4c70-b9ac-72a3e13afe7e" message="get-contracts-by-id-implementation-flow-started" />
+		<salesforce:query doc:name="Get Contracts By Id From Salesforce" doc:id="a3c93fc6-3229-465b-946f-baaa6a41b366" config-ref="Salesforce_Config" >
+			<salesforce:salesforce-query ><![CDATA[SELECT AccountId,BillingCity,BillingCountry,BillingPostalCode,BillingState,BillingStreet,Id,Description,Status FROM Contract where Id=':id']]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[{
+	"id": attributes.uriParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<choice doc:name="Choice" doc:id="9177f875-0ac4-49e5-8e81-32000be4bea9" >
+			<when expression="#[isEmpty(payload)]">
+				<ee:transform doc:name="DW Set To Get Contracts By Id Respnose Transform" doc:id="ac1b5a9b-d95c-4c1b-a389-6019d8caf445">
+			<ee:message>
+				<ee:set-payload resource="dwlScripts/get-contracts-by-id-respnse.dwl" />
+			</ee:message>
+		</ee:transform>
+			</when>
+			<otherwise>
+				<ee:transform doc:name="DW Set To Get Contracts By Id Respnose Transform" doc:id="76f097ce-092b-4c02-9e4d-b50871b158f5">
+					<ee:message>
+						<ee:set-payload resource="dwlScripts/get-contracts-by-id-respnse.dwl" />
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="get-contracts-by-id-implementation-flow-ended" doc:id="8410baf0-c13a-43d6-ad02-614ec78916ea" message="get-contracts-by-id-implementation-flow-ended" />
+	</sub-flow>
+	<sub-flow name="create-contracts-implementation-flow" doc:id="9f831c96-b4e0-431e-b18b-686a4ea2bd3a" >
+		<logger level="INFO" doc:name="create-contracts-implementation-flow-started" doc:id="28dd1752-bbf9-46bb-90b8-c349ae240c85" message="create-contracts-implementation-flow-started" />
+		<ee:transform doc:name="DW Set To Create Contract Request Transform" doc:id="540a32cf-db20-4257-9978-0df77d185dae" >
+			<ee:message >
+				<ee:set-payload resource="dwlScripts/create-contract-request.dwl" />
+			</ee:message>
+		</ee:transform>
+		<salesforce:create doc:name="Create Contract On Salesforce" doc:id="588d5740-84f3-4952-bb12-95b535ef8b8f" config-ref="Salesforce_Config" type="Contract"/>
+		<ee:transform doc:name="DW Set To Create Contact Response Transform" doc:id="7abad0d9-2521-4b46-9215-ca81a529414c" >
+			<ee:message >
+				<ee:set-payload resource="dwlScripts/create-contracts-response.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="create-contracts-implementation-flow-ended" doc:id="1baf5ac0-715e-4e8d-b6aa-92e1498d5268" message="create-contracts-implementation-flow-ended" />
+	</sub-flow>
+	<sub-flow name="update-contracts-implementation-flow" doc:id="25581d6e-603d-41c1-b176-701881618c64" >
+		<logger level="INFO" doc:name="update-contracts-implementation-flow-started" doc:id="3580e812-92c1-41d6-b380-43e21df764f1" message="update-contracts-implementation-flow-started" />
+		<set-variable value="#[attributes.uriParams.id]" doc:name="Set Variable To Store Id" doc:id="b6e4b6d4-7fe1-45b8-88ca-671b11234bfb" variableName="id"/>
+		<ee:transform doc:name="DW Scripts To Update Contract Request Transform" doc:id="f2823aab-d1b3-4ba6-8b3c-e3f77838753e" >
+			<ee:message >
+				<ee:set-payload resource="dwlScripts/update-contracts-request.dwl" />
+			</ee:message>
+		</ee:transform>
+		<salesforce:update type="Contract" doc:name="Update Contact On Salesforce" doc:id="048856a6-cda4-4dd5-a4a5-d5b63a493b10" config-ref="Salesforce_Config"/>
+		<ee:transform doc:name="DW Set To Update Contract Response Transform" doc:id="41e1c3dc-b6ed-4d55-a6ce-eb3116df2b0a" >
+			<ee:message >
+				<ee:set-payload resource="dwlScripts/update-contracts-response.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="update-contracts-implementation-flow-ended" doc:id="ccbf45f4-a22f-4003-8edd-9f357cd6e2f8" message="update-contracts-implementation-flow-ended" />
+	</sub-flow>
+	<sub-flow name="delete-contracts-implementation-flow" doc:id="aabd22dc-93f2-44f2-b6a9-2aca8391197d" >
+		<logger level="INFO" doc:name="delete-contracts-implementation-flow-started" doc:id="07e46633-2a2a-45a2-9e5f-57526d54a304" message="delete-contracts-implementation-flow-started" />
+		<set-variable value="#[attributes.uriParams.id]" doc:name="Set Variable tTo Store Id" doc:id="261428ab-ab35-4ac2-b4b1-aae18dca9830" variableName="id" />
+		<salesforce:delete doc:name="Delete Contract From Salesforce" doc:id="933e56aa-6053-427d-a5d4-01ca74efa2db" config-ref="Salesforce_Config">
+			<salesforce:ids ><![CDATA[#[[vars.id]]]]></salesforce:ids>
+		</salesforce:delete>
+		<ee:transform doc:name="DW Set To DeleteContract Response Transform" doc:id="d6310504-6939-47af-a177-475558a8ab7a" >
+			<ee:message >
+				<ee:set-payload resource="dwlScripts/delete-contracts-response.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="delete-contracts-implementation-flow-ended" doc:id="1cbe106f-777b-42e2-8a76-5e7f45ee301a" message="delete-contracts-implementation-flow-ended" />
+	</sub-flow>
+</mule>

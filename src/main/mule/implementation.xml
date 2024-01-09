@@ -29,7 +29,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			<when expression="#[isEmpty(payload)]">
 				<ee:transform doc:name="DW Set To Get Contracts By Id Respnose Transform" doc:id="ac1b5a9b-d95c-4c1b-a389-6019d8caf445">
 			<ee:message>
-				<ee:set-payload resource="dwlScripts/get-contracts-by-id-respnse.dwl" />
+						<ee:set-payload resource="dwlScripts/get-contracts-by-id-respnse2.dwl" />
 			</ee:message>
 		</ee:transform>
 			</when>

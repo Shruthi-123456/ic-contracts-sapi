@@ -1,0 +1,14 @@
+#Autodiscovery API ID
+autodiscovery.api.id: "![I6TxG25prfv/mQiP7vB5ew==]"
+
+#salesforce configuration
+sfc:
+ username: "![zaBR35QgQfzERcUvTErjkUlooRvbJJudGAIo4AT+aws=]"
+ password: "![y7eooAkLd8xLhqoyskABfHDThQ8aGF8InFHA6ytPWYM=]"
+ token: "![+WGhzDouRoe9RFCNLOEKC+zQ8j1Rh44oiLxRQ8l1jKM=]"
+ 
+#key store configuration
+ksc: 
+ keypassword: "![/h/H663808rv+3BEE6l6Tg==]"
+ password: "![/h/H663808rv+3BEE6l6Tg==]"
+

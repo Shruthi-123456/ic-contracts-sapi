@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="INFO" name="cloudhub"
+
+    packages="com.splunk.logging,org.apache.logging.log4j">
+
+    <Appenders>
+
+        <Http name="Splunk" url="http://localhost:8088/services/collector/raw">
+
+            <Property name="Authorization" value="Splunk 3c5ea695-4ca9-4c22-99e1-295b96565201" ></Property>
+
+           <PatternLayout pattern="[%d{MM-dd HH:mm:ss}] %-5p %c{1} [%t]: %m%n" ></PatternLayout>
+
+        </Http>
+
+    </Appenders>
+
+    <Loggers>
+
+        <logger name="httpclient.wire">
+
+            <level value="debug" ></level>
+
+        </logger>
+        <AsyncRoot level="INFO">
+
+            <AppenderRef ref="Splunk" ></AppenderRef>
+
+        </AsyncRoot>
+
+        <AsyncLogger name="com.gigaspaces" level="ERROR" ></AsyncLogger>
+
+        <AsyncLogger name="com.j_spaces" level="ERROR" ></AsyncLogger>
+
+        <AsyncLogger name="com.sun.jini" level="ERROR" ></AsyncLogger>
+
+        <AsyncLogger name="net.jini" level="ERROR" ></AsyncLogger>
+
+        <AsyncLogger name="org.apache" level="WARN" ></AsyncLogger>
+
+        <AsyncLogger name="org.apache.cxf" level="WARN" ></AsyncLogger>
+
+        <AsyncLogger name="org.springframework.beans.factory"
+
+            level="WARN" ></AsyncLogger>
+
+        <AsyncLogger name="org.mule" level="INFO" ></AsyncLogger>
+
+        <AsyncLogger name="com.mulesoft" level="INFO" ></AsyncLogger>
+
+        <AsyncLogger name="org.jetel" level="WARN" ></AsyncLogger>
+
+        <AsyncLogger name="Tracking" level="WARN" ></AsyncLogger>
+
+        <AsyncLogger name="org.mule.module.http.internal.HttpMessageLogger"
+
+            level="DEBUG" ></AsyncLogger>
+
+        <AsyncLogger name="com.ning.http" level="DEBUG" ></AsyncLogger>
+
+    </Loggers>
+
+</Configuration>

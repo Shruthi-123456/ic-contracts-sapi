@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<error-handler name="Error_Handler" doc:id="24b71c4c-4b55-465d-8de1-c5095e39c781" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="bb4dd3bd-8220-46b9-beda-606bd1075ed1" type="APIKIT:BAD_REQUEST" >
+			<logger level="ERROR" doc:name="Error Handler Invoked - APIKIT_BAD_REQUEST" doc:id="99ddae37-6b7f-4e35-ba37-deaa5cf8e381" message="Error Handler Invoked - APIKIT_BAD_REQUEST" />
+			<ee:transform doc:name="DW Transform for Error mapping" doc:id="b79ca08d-3e5e-4e9b-8813-dbba0e332286" >
+				<ee:variables >
+					<ee:set-variable resource="dwlScripts/v-error-response400.dwl" variableName="vErrorMapping" />
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="sf-common-error-response" doc:id="1c2059e2-2cea-4ec4-a6b4-c62967bac701" name="sf-common-error-response" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate1" doc:id="42b97056-468a-4e4c-961b-01426a731e69" type="APIKIT:NOT_FOUND" >
+			<logger level="ERROR" doc:name="Error Handler Invoked - APIKIT_NOT_FOUND" doc:id="7c038835-985b-427d-aac8-4e61d9ec40c5" message="Error Handler Invoked - APIKIT_NOT_FOUND" />
+			<ee:transform doc:name="DW Transform for Error mapping" doc:id="45345f50-eb42-40fe-8f43-698f21e5c3a9" >
+				<ee:variables >
+					<ee:set-variable resource="dwlScripts/v-error-response404.dwl" variableName="vErrorMapping" />
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="sf-common-error-response" doc:id="13933ded-7592-4f4e-bff8-345bfb97cb55" name="sf-common-error-response" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate2" doc:id="196e593a-282e-468e-afa7-d52adca224c0" type="APIKIT:METHOD_NOT_ALLOWED" >
+			<logger level="ERROR" doc:name="Error Handler Invoked - APIKIT_METHOD_NOT_ALLOWED" doc:id="311b2bac-6c4c-47a6-9155-6de93abddede" message="Error Handler Invoked - APIKIT_METHOD_NOT_ALLOWED" />
+			<ee:transform doc:name="DW Transform for Error mapping" doc:id="7bd908bd-f0c0-4ff7-aad1-ee3012dad880" >
+				<ee:variables >
+					<ee:set-variable resource="dwlScripts/v-error-response405.dwl" variableName="vErrorMapping" />
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="sf-common-error-response" doc:id="1a4ab170-7151-422a-961d-eccff0c666f9" name="sf-common-error-response" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate3" doc:id="ae142c0f-3c85-4a98-98b3-8d2bcf70e46c" type="APIKIT:UNSUPPORTED_MEDIA_TYPE" >
+			<logger level="ERROR" doc:name="Error Handler Invoked - APIKIT_UNSUPPORTED_MEDIA_TYPE" doc:id="af329838-97c1-4847-a86c-1a069dd2e8af" message="Error Handler Invoked - APIKIT_UNSUPPORTED_MEDIA_TYPE" />
+			<ee:transform doc:name="DW Transform for Error mapping" doc:id="2ee2bec5-2559-4541-b753-e348f225dca9" >
+				<ee:variables >
+					<ee:set-variable resource="dwlScripts/v-error-response415.dwl" variableName="vErrorMapping" />
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="sf-common-error-response" doc:id="d23b84d5-a5a4-4ccd-9620-55fd92604797" name="sf-common-error-response" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate4" doc:id="ee8ffb5b-5e59-4bc0-8f24-0fb7758726c9" type="APIKIT:NOT_IMPLEMENTED" >
+			<logger level="ERROR" doc:name="Error Handler Invoked - APIKIT_NOT_IMPLEMENTED" doc:id="c44c2495-2fce-40e0-a217-b4d652dd77ab" message="Error Handler Invoked - APIKIT_NOT_IMPLEMENTED" />
+			<ee:transform doc:name="DW Transform for Error mapping" doc:id="e6df79eb-74a0-4163-a320-28d2d34fd78d" >
+				<ee:variables >
+					<ee:set-variable resource="dwlScripts/v-error-response501.dwl" variableName="vErrorMapping" />
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="sf-common-error-response" doc:id="b1286dd7-fb8c-4f3d-9300-4c4109ff6899" name="sf-common-error-response" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate5" doc:id="356af3bc-49cb-4fad-a3cd-c6af3d9a2c8a" type="ANY" >
+			<ee:transform doc:name="DW Transform for Error mapping" doc:id="34bb326f-4d6b-4bcf-914f-0d0c095a32e9" >
+				<ee:variables >
+					<ee:set-variable resource="dwlScripts/v-error-response-sf-error.dwl" variableName="vErrorMapping" />
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="sf-common-error-response" doc:id="b7f87c79-a9c9-4ba4-afd7-0e82fc058f19" name="sf-common-error-response" />
+		</on-error-propagate>
+	</error-handler>
+	<sub-flow name="sf-common-error-response" doc:id="a542d7bf-dc1e-41fb-9849-92c03383a412" >
+		<logger level="ERROR" doc:name="LOG Error Message" doc:id="8f42e2ef-ba58-4e6b-80a3-53dfc737869a" message='"Error - HTTP Status Code:" #[vars.vErrorMapping.httpStatus] "Error Message Description :" #[vars.vErrorMapping.errorDescription]' />
+		<set-variable value="#[vars.vErrorMapping.httpStatus]" doc:name="Set Http Status" doc:id="1482790a-1147-402b-bd70-9fdf8e4fdda5" variableName="httpStatus" />
+		<ee:transform doc:name="Error Response" doc:id="bac480e1-5285-4525-b252-bed4bd18694b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	is_success: false,
+    errors:[
+    {
+        error_code: vars.vErrorMapping.errorCode,
+        error_message: vars.vErrorMapping.errorDescription
+    }]
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

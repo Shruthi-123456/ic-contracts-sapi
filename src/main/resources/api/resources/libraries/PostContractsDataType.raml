@@ -1,0 +1,54 @@
+#%RAML 1.0 Library
+types:
+  contracts:
+    type: object
+    properties:
+       accountid:
+         type: string
+         required: true
+       contract_term:
+         type: integer
+         required: true
+       billing_country:
+        type: string
+        required: false
+       billing_city:
+        type: string
+        required: false
+       billing_postalcode:
+        type: string
+        required: false
+       billing_state:
+         type: string
+         required: false
+       billing_street:
+         type: string
+         required: false
+       description:
+         type: string
+         required: false
+       status:
+         type: string
+         required: false
+  post_contracts_request:
+    type: array
+    items: contracts
+      
+
+  post_contracts_response:
+   properties:
+      is_success :
+        description: Success
+        type: boolean
+        required: true
+      response:
+        type: array
+        items:
+          type: object
+          properties:
+           payload:
+            type: object
+            properties:
+              success: boolean
+              id: string
+              errors: array
